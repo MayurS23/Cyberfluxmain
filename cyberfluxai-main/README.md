@@ -1,364 +1,296 @@
-# Cyberflux - AI-Powered Intrusion Detection System
+# **CyberFlux – AI-Powered Intrusion Detection and Monitoring System**
 
 <div align="center">
-  <img src="https://img.shields.io/badge/AI-Powered-cyan" />
+  <img src="https://img.shields.io/badge/ML--Based-Yes-cyan" />
   <img src="https://img.shields.io/badge/Models-6-blue" />
-  <img src="https://img.shields.io/badge/Real--Time-Monitoring-green" />
+  <img src="https://img.shields.io/badge/Ensemble-Learning-green" />
   <img src="https://img.shields.io/badge/FastAPI-Backend-red" />
   <img src="https://img.shields.io/badge/React-Frontend-blue" />
 </div>
 
+---
+
 ## Overview
 
-Cyberflux is a complete end-to-end ML-based Intrusion Detection System that uses multiple deep learning and machine learning models to detect network threats in real-time.
+**CyberFlux** is a **hybrid Machine Learning and Deep Learning–based Intrusion Detection and Monitoring System** designed to detect malicious network activities using an **ensemble of multiple models**.
 
-### Key Features
-
-✅ **6 ML Models**: LSTM, CNN, Autoencoder, GAN, Random Forest, XGBoost  
-✅ **Multi-Dataset Training**: CICIDS2017, UNSW-NB15, NSL-KDD, KDDCup99, CTU-13  
-✅ **Ensemble Decision Engine**: Weighted voting system  
-✅ **Real-Time Detection**: WebSocket-based live threat monitoring  
-✅ **Explainable AI**: SHAP values and reconstruction error analysis    
-✅ **Modern Dashboard**: React-based SOC dashboard with visualizations  
-✅ **Dual Mode**: ML Mode + Simulation Fallback  
+The system analyzes network traffic data, detects known and unknown attacks, and provides **real-time monitoring through a web-based dashboard**. CyberFlux is developed as an **academic and research-oriented prototype**, focusing on intelligent detection, robustness, and system integration.
 
 ---
 
-## Architecture
+##  Key Features
 
-### Backend (FastAPI + Python)
+ **Hybrid ML + DL Approach**
+
+* LSTM
+* CNN
+* Autoencoder
+* Random Forest
+* XGBoost
+* GAN-based synthetic data generation
+
+ **Ensemble Decision Engine**
+
+* Weighted aggregation of model predictions
+* Improved accuracy and reduced false positives
+
+ **Benchmark Dataset Training**
+
+* NSL-KDD (primary dataset)
+* KDDCup99 (legacy reference dataset)
+
+ **Real-Time Monitoring**
+
+* FastAPI backend
+* WebSocket-based alert streaming
+
+ **Modern Dashboard**
+
+* React-based SOC dashboard
+* Live threat monitoring and visual analytics
+
+ **Dual Mode Operation**
+
+* ML inference mode
+* Simulation fallback mode for demonstration
+
+---
+
+##  Architecture Overview
+
+CyberFlux follows a modular, layered architecture consisting of backend services, machine learning modules, database storage, and a frontend interface.
+
+---
+
+### 🔹 Backend Architecture (FastAPI + Python)
+
 ```
 /app/backend/
-├── server.py              # FastAPI server with WebSocket
+├── server.py              # FastAPI server with REST & WebSocket APIs
 ├── ml/
-│   ├── datasets/          # Dataset download & preprocessing
-│   ├── models/            # All 6 model implementations
+│   ├── datasets/          # Dataset download and preprocessing
+│   ├── models/            # ML & DL model definitions
 │   ├── ensemble.py        # Ensemble decision engine
-│   ├── explainer.py       # SHAP & XAI module
 │   ├── training_pipeline.py
 │   └── synthetic_generator.py
 └── requirements.txt
 ```
 
-### Frontend (React + Tailwind)
+**Responsibilities:**
+
+* Traffic preprocessing
+* Model inference
+* Ensemble decision making
+* Alert generation
+* Database interaction
+* Real-time communication with frontend
+
+---
+
+###  Frontend Architecture (React)
+
 ```
 /app/frontend/
 ├── src/
 │   ├── pages/
-│   │   └── Dashboard.jsx   # Main dashboard
+│   │   └── Dashboard.jsx
 │   ├── components/
 │   │   ├── ThreatTable.jsx
 │   │   ├── NetworkMetrics.jsx
 │   │   ├── ModelComparison.jsx
-│   │  
 │   │   └── SystemStatus.jsx
 │   └── App.js
 └── package.json
 ```
 
+**Responsibilities:**
+
+* Real-time alert visualization
+* Attack distribution charts
+* Model status display
+* User interaction
+
 ---
 
-## Quick Start
+##  Quick Start (Academic Execution)
 
-### 1. Install Dependencies
-
-Backend dependencies are already installed. Frontend is ready.
-
-### 2. Train ML Models (IMPORTANT)
-
-To use ML mode, you need to train all 6 models:
+### 1️ Model Training
 
 ```bash
 cd /app/backend
 python ml/training_pipeline.py
 ```
 
-**Training Process:**
-1. Downloads datasets (NSL-KDD, KDDCup99)
-2. Preprocesses and unifies data
-3. Trains 6 models sequentially
-4. Saves trained models to `/app/backend/ml/models/trained/`
+### **Training Pipeline**
 
+1. Downloads benchmark datasets
+2. Preprocesses and normalizes traffic data
+3. Trains ML and DL models
+4. Saves trained models locally
 
-### 3. Start Services
-
-Services are already running via supervisor:
-
-```bash
-# Check status
-sudo supervisorctl status
-
-# Restart if needed
-sudo supervisorctl restart backend frontend
-```
-
-### 4. Access Dashboard
-
-Open your browser to the frontend URL (provided by Emergent).
+>  Training was executed in a controlled cloud environment due to hardware constraints.
+> Local execution is possible with adequate system resources.
 
 ---
 
-## ML Models
+##  Machine Learning Models Used
 
-### 1. LSTM (Sequential Anomaly Detection)
-- **Architecture**: 2 LSTM layers (128, 64 units) + Dense
-- **Purpose**: Detects temporal patterns in network flows
-- **Input**: Sequences of 10 time steps
+### **1. LSTM**
 
-### 2. CNN (Feature Map Classification)
-- **Architecture**: Conv2D layers + MaxPooling + Dense
-- **Purpose**: Spatial feature extraction from flow data
-- **Input**: 2D feature maps
+* Captures temporal patterns in network flows
+* Effective for sequential attack behavior
 
-### 3. Autoencoder (Unsupervised Anomaly Detection)
-- **Architecture**: Encoder (128→64→32→16) + Decoder (symmetric)
-- **Purpose**: Learns normal traffic patterns, flags anomalies
-- **Training**: Only on benign traffic
+### **2. CNN**
 
-### 4. GAN (Generator + Discriminator)
-- **Generator**: Creates synthetic attack samples
-- **Discriminator**: Classifies real vs fake (anomaly detection)
-- **Purpose**: Data augmentation + semi-supervised learning
+* Learns spatial feature relationships
+* Useful for structured traffic features
 
-### 5. Random Forest
-- **Type**: Ensemble classifier
-- **Purpose**: Baseline model with feature importance
-- **Trees**: 100 estimators
+### **3. Autoencoder**
 
-### 6. XGBoost
-- **Type**: Gradient boosting classifier
-- **Purpose**: High-accuracy attack classification
-- **Integration**: SHAP explainability
+* Unsupervised anomaly detection
+* Flags deviations from learned normal traffic
 
----
+### **4. GAN (Synthetic Data Generator)**
 
-## API Endpoints
+* Generates synthetic attack-like samples
+* Improves robustness and dataset diversity
+* Used for **data augmentation only**
 
-### Core Endpoints
+### **5. Random Forest**
 
-#### `GET /api/status`
-System status including ML mode, loaded models, database status.
+* Fast and stable baseline classifier
+* Handles tabular network features effectively
 
-#### `POST /api/predict`
-Make predictions on network flow features.
-```json
-{
-  "features": [0.1, 0.2, ...] // 41 features
-}
-```
+### **6. XGBoost**
 
-#### `GET /api/alerts`
-Retrieve recent alerts (real-time threats).
-
-#### `GET /api/alerts/stats`
-Get statistics: total alerts, attacks, distribution.
-
-#### `POST /api/copilot`
-LLM Security CoPilot - AI-powered threat analysis.
-```json
-{
-  "question": "What are the most critical threats?",
-  "context": {...}
-}
-```
-
-#### `GET /api/explain/{alert_id}`
-Get detailed explanation for a specific alert (SHAP, recommendations).
-
-#### `POST /api/mode`
-Toggle between ML mode and simulation.
-```json
-{
-  "ml_mode": true
-}
-```
-
-#### `GET /api/models`
-List all available models and their status.
-
-### WebSocket
-
-#### `WS /ws`
-Real-time threat updates broadcast to all connected clients.
+* High-accuracy gradient boosting model
+* Strong performance on labeled attack data
 
 ---
 
-## Datasets
+##  Datasets Used
 
-### Supported Datasets
+### **Primary Dataset**
 
-1. **NSL-KDD** (Automated download)
-   - Improved version of KDD Cup 99
-   - 41 features
-   - Binary & multiclass labels
+* **NSL-KDD**
 
-2. **KDDCup99** (Automated download)
-   - Classic network intrusion dataset
-   - 10% subset (~500K records)
+  * Standard benchmark IDS dataset
+  * 41 network traffic features
+  * Binary and multi-class labels
 
-### Feature Engineering
+### **Legacy Reference Dataset**
 
-**Unified Feature Schema (41 features):**
-- Flow duration, protocol, service
-- Source/destination bytes
-- Error rates
-- Host statistics
-- Connection features
+* **KDDCup99**
+
+  * Used for comparative and reference purposes
+
+> No live network traffic was captured in this project.
 
 ---
 
+##  Explainability 
 
-### Capabilities
-- Threat explanation and analysis
-- Mitigation strategy recommendations
-- Model output interpretation
-- Security best practices
-- Incident response guidance
+CyberFlux includes **basic interpretability mechanisms**, without advanced post-hoc explainers.
 
+✔ Model confidence scores
+✔ Autoencoder reconstruction error
+✔ Rule-based explanation logic
 
-
----
-
-## Dashboard Features
-
-### 1. Network Metrics
-- Total alerts, attacks, normal traffic
-- Attack rate percentage
-- Real-time statistics
-- Attack type distribution (pie chart)
-
-### 2. Threat Table
-- Live threat monitoring
-- Severity, confidence, attack type
-- Source/destination IPs
-- Detailed alert inspection
-- Mitigation recommendations
-
-### 3. Model Comparison
-- Model status (loaded/inactive)
-- Performance metrics (accuracy, precision, recall)
-- Bar chart comparison
-- Radar chart multi-metric analysis
-- Ensemble decision visualizer
-
-
-## Performance Tuning
-
-### GPU Acceleration
-```python
-# Check GPU availability
-import tensorflow as tf
-print(tf.config.list_physical_devices('GPU'))
-```
-
-### Batch Processing
-Increase batch sizes for faster training:
-```python
-model.train(X_train, y_train, batch_size=256)
-```
-
-### Model Pruning
-Disable unused models to reduce inference time.
+> Advanced explainability techniques (e.g., SHAP) are considered **future enhancements**.
 
 ---
 
-## Troubleshooting
+##  Dashboard Capabilities
 
-### Issue: Models not loading
-**Solution**: Train models first using `python ml/training_pipeline.py`
+###  Network Metrics
 
-### Issue: WebSocket not connecting
-**Solution**: Check if backend is running on correct port
+* Total alerts
+* Attack vs normal traffic
+* Attack rate
 
-### Issue: Low detection accuracy
-**Solution**: 
-1. Train on full datasets (not samples)
-2. Increase training epochs
-3. Tune hyperparameters
+###  Threat Monitoring
 
-### Issue: Out of memory
-**Solution**:
-1. Reduce batch size
-2. Use data generators
-3. Train models separately
+* Live alert table
+* Attack type, severity, confidence
+* Source and destination details
 
----
+###  Model Insights
 
-## Tech Stack
-
-**Backend:**
-- FastAPI (REST API)
-- TensorFlow/Keras (Deep Learning)
-- Scikit-learn (ML)
-- XGBoost (Gradient Boosting)
-- SHAP (Explainability)
-- Motor (Async MongoDB)
-- WebSockets (Real-time)
-- Emergent Integrations (LLM)
-
-**Frontend:**
-- React 19
-- Tailwind CSS
-- Shadcn/UI
-- Recharts (Visualizations)
-- Socket.io (WebSocket client)
-- Axios (HTTP client)
-
-**Database:**
-- MongoDB (Alerts, events, logs)
+* Model availability status
+* Performance comparison
+* Ensemble decision visualization
 
 ---
 
-## Production Deployment
+##  Testing & Validation
 
-### Optimization Checklist
-- [ ] Train all models with full datasets
-- [ ] Enable GPU acceleration
-- [ ] Set up model versioning
-- [ ] Configure logging and monitoring
-- [ ] Implement rate limiting
-- [ ] Add authentication
-- [ ] Set up backup schedules
-- [ ] Load test WebSocket connections
+* Unit testing of individual modules
+* End-to-end system testing
+* Validation using benchmark datasets
+* Dry-run testing of mitigation logic
 
 ---
 
-## Contributing
+##  Future Enhancements (Not Implemented)
 
-This is a complete ML-based IDS system. For enhancements:
-1. Add new model architectures
-2. Integrate additional datasets
-3. Improve explainability visualizations
-4. Optimize inference speed
+> The following are **planned improvements**, not part of the academic implementation:
 
----
-
-## License
-
-Built for academic/research purposes. For production use, ensure compliance with dataset licenses.
+* Live packet capture integration
+* Cloud-scale deployment
+* Advanced explainability techniques
+* Automated enforcement of mitigation actions
+* Continuous model retraining
 
 ---
 
-## Credits
+##  Tech Stack
+
+### **Backend**
+
+* FastAPI
+* Python
+* TensorFlow / Keras
+* Scikit-learn
+* XGBoost
+* MongoDB
+* WebSockets
+
+### **Frontend**
+
+* React
+* Tailwind CSS
+* Recharts
+* Axios
+
+---
+
+##  Academic Disclaimer
+
+This project is developed **strictly for academic and research purposes**.
+All experiments were conducted using public benchmark datasets and simulated traffic.
+
+---
+
+##  License
+
+Academic use only.
+Ensure compliance with dataset licenses for any extended usage.
+
+---
+
+##  Credits
 
 **Datasets:**
-- NSL-KDD: University of New Brunswick
-- CICIDS2017: Canadian Institute for Cybersecurity
-- UNSW-NB15: UNSW Canberra
-- CTU-13: Czech Technical University
 
-**Models:**
-- TensorFlow, Keras
-- Scikit-learn, XGBoost
-- SHAP
+* NSL-KDD
+* KDDCup99
 
+**Libraries:**
 
+* TensorFlow
+* Scikit-learn
+* XGBoost
 
 ---
 
-## Contact
-
-For issues or questions about this implementation, refer to the system logs or use the built-in LLM CoPilot for assistance.
-
----
 

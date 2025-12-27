@@ -207,28 +207,6 @@ Real-time threat updates broadcast to all connected clients.
 
 ---
 
-## Explainability (XAI)
-
-### SHAP Values
-- Applied to XGBoost and Random Forest
-- Shows feature importance for each prediction
-- Top 5 influential features highlighted
-
-### Reconstruction Error
-- Autoencoder-specific
-- Identifies anomalous features
-- Visualizes deviation from normal patterns
-
-### CNN Feature Maps
-- Convolutional layer activations
-- Spatial feature importance
-
-### GAN Discriminator Confidence
-- Real vs fake probability
-- Anomaly score calculation
-
----
-
 
 ### Capabilities
 - Threat explanation and analysis

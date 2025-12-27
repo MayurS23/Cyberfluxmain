@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoPilot Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        .chat {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .message {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .user { background: #0891b2; text-align: right; }
+        .assistant { background: #334155; }
+        .input-area {
+            display: flex;
+            gap: 10px;
+        }
+        input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #444;
+            background: #2a2a2a;
+            color: #fff;
+        }
+        button {
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            background: #0891b2;
+            color: white;
+            cursor: pointer;
+        }
+        button:disabled {
+            background: #444;
+            cursor: not-allowed;
+        }
+        .loading {
+            color: #0891b2;
+        }
+        .error {
+            color: #ef4444;
+        }
+    </style>
+</head>
+<body>
+    <h1>🤖 Security CoPilot Test</h1>
+    <p>Test the CoPilot AI assistant</p>
+
+    <div class="chat" id="chat">
+        <div class="message assistant">
+            Hello! I'm your Security CoPilot. Ask me anything about cybersecurity!
+        </div>
+    </div>
+
+    <div class="input-area">
+        <input type="text" id="input" placeholder="Ask a question..." />
+        <button id="send" onclick="sendMessage()">Send</button>
+    </div>
+
+    <div style="margin-top: 20px;">
+        <h3>Suggested Questions:</h3>
+        <button onclick="setQuestion('What is a DDoS attack?')">What is a DDoS attack?</button>
+        <button onclick="setQuestion('How does the ensemble model work?')">How does the ensemble model work?</button>
+        <button onclick="setQuestion('What are best practices for IDS?')">Best practices for IDS?</button>
+    </div>
+
+    <script>
+        const BACKEND_URL = window.location.origin;
+        let loading = false;
+
+        function addMessage(role, content) {
+            const chat = document.getElementById('chat');
+            const message = document.createElement('div');
+            message.className = `message ${role}`;
+            message.textContent = content;
+            chat.appendChild(message);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function setQuestion(question) {
+            document.getElementById('input').value = question;
+        }
+
+        async function sendMessage() {
+            if (loading) return;
+
+            const input = document.getElementById('input');
+            const question = input.value.trim();
+            
+            if (!question) return;
+
+            // Add user message
+            addMessage('user', question);
+            input.value = '';
+
+            // Show loading
+            loading = true;
+            document.getElementById('send').disabled = true;
+            addMessage('assistant', '⏳ Thinking...');
+
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/copilot`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        question: question,
+                        context: {}
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+
+                // Remove loading message
+                const messages = document.getElementsByClassName('message');
+                messages[messages.length - 1].remove();
+
+                // Add assistant response
+                addMessage('assistant', data.response);
+
+            } catch (error) {
+                // Remove loading message
+                const messages = document.getElementsByClassName('message');
+                messages[messages.length - 1].remove();
+
+                addMessage('assistant', `❌ Error: ${error.message}`);
+                console.error('CoPilot error:', error);
+            } finally {
+                loading = false;
+                document.getElementById('send').disabled = false;
+            }
+        }
+
+        // Enter key to send
+        document.getElementById('input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>

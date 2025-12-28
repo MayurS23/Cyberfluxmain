@@ -292,5 +292,19 @@ Ensure compliance with dataset licenses for any extended usage.
 * XGBoost
 
 ---
+PROJECT TITLE: CyberFlux: Intrusion Detection and Monitoring System
+
+DEPLOYED APPLICATION URL:
+https://cyberflux-ids.emergent.host 
+
+
+LOGIN CREDENTIALS (if any):
+Username: admin
+Password: adminpassword
+
+NOTE:
+• Internet connection is required to access the deployed application.
+• In case the deployed URL is unavailable, the complete source code
+  and setup instructions are provided in this pendrive.
 
 
